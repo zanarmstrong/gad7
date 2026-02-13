@@ -262,32 +262,6 @@
 
   .data-status.success { color: #3D6B45; }
   .data-status.error { color: #C2584B; }
-
-  .save-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 0.75rem;
-    padding: 0.5rem 1rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--muted);
-    background: #F0EDE8;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
-  }
-
-  .save-btn:hover {
-    background: #E6E2DC;
-    color: var(--text);
-  }
-
-  .save-btn:active {
-    background: #DDD8D2;
-  }
 </style>
 </head>
 <body>
@@ -306,7 +280,6 @@
     </div>
   </div>
 
-  <button id="savePng" class="save-btn">Save as PNG</button>
 
   <div class="data-input-area">
     <label for="dataInput" class="data-label">Paste your data here <span class="data-format">(date,score,annotation — one per line, blank score = missed session, annotation is optional)</span></label>
@@ -613,66 +586,6 @@ function render() {
 
 render();
 window.addEventListener("resize", render);
-
-// Save as PNG
-document.getElementById("savePng").addEventListener("click", async () => {
-  const svgEl = document.getElementById("chart");
-  const viewBox = svgEl.getAttribute("viewBox").split(" ").map(Number);
-  const vbW = viewBox[2];
-  const vbH = viewBox[3];
-  const scale = 2;
-
-  // Clone SVG
-  const clone = svgEl.cloneNode(true);
-  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-  clone.setAttribute("width", vbW);
-  clone.setAttribute("height", vbH);
-
-  // Add background rect
-  const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  bg.setAttribute("width", vbW);
-  bg.setAttribute("height", vbH);
-  bg.setAttribute("fill", "#FAF7F2");
-  clone.insertBefore(bg, clone.firstChild);
-
-  // Inline all computed styles on every element
-  const original = svgEl.querySelectorAll("*");
-  const cloned = clone.querySelectorAll("*");
-  for (let i = 0; i < original.length; i++) {
-    const computed = window.getComputedStyle(original[i]);
-    let styleStr = "";
-    for (let j = 0; j < computed.length; j++) {
-      const prop = computed[j];
-      styleStr += `${prop}:${computed.getPropertyValue(prop)};`;
-    }
-    cloned[i].setAttribute("style", styleStr);
-  }
-
-  const svgData = new XMLSerializer().serializeToString(clone);
-  const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
-  const url = URL.createObjectURL(svgBlob);
-
-  const img = new Image();
-  img.onload = () => {
-    const canvas = document.createElement("canvas");
-    canvas.width = vbW * scale;
-    canvas.height = vbH * scale;
-    const ctx = canvas.getContext("2d");
-    ctx.scale(scale, scale);
-    ctx.drawImage(img, 0, 0, vbW, vbH);
-    URL.revokeObjectURL(url);
-
-    const a = document.createElement("a");
-    a.download = "gad7-chart.png";
-    a.href = canvas.toDataURL("image/png");
-    a.click();
-  };
-  img.onerror = () => {
-    URL.revokeObjectURL(url);
-    alert("Export failed — try right-clicking the chart and choosing 'Save as image' instead.");
-  };
-  img.src = url;
-});
 </script>
 
 </body>
