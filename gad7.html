@@ -189,9 +189,9 @@ const Y_MIN = 0;
 const Y_MAX = 21;
 
 const BANDS = [
-  { min: 0,  max: 4,  color: "var(--band-minimal)", name: "Minimal",  range: "(0–4)",   textColor: "#4A6FA5" },
-  { min: 5,  max: 9,  color: "var(--band-mild)",     name: "Mild",     range: "(5–9)",   textColor: "#B08C3E" },
-  { min: 10, max: 14, color: "var(--band-moderate)",  name: "Moderate", range: "(10–14)", textColor: "#C07A3A" },
+  { min: 0,  max: 5,  color: "var(--band-minimal)", name: "Minimal",  range: "(0–4)",   textColor: "#4A6FA5" },
+  { min: 5,  max: 10, color: "var(--band-mild)",     name: "Mild",     range: "(5–9)",   textColor: "#B08C3E" },
+  { min: 10, max: 15, color: "var(--band-moderate)",  name: "Moderate", range: "(10–14)", textColor: "#C07A3A" },
   { min: 15, max: 21, color: "var(--band-severe)",    name: "Severe",   range: "(15–21)", textColor: "#A3402F" },
 ];
 
@@ -463,9 +463,9 @@ document.getElementById("savePng").addEventListener("click", () => {
 
   // Bands with gaps
   [
-    { min: 0, max: 4, color: "#E0EAF5", name: "Minimal", range: "(0–4)", textColor: "#4A6FA5" },
-    { min: 5, max: 9, color: "#FFF8E1", name: "Mild", range: "(5–9)", textColor: "#B08C3E" },
-    { min: 10, max: 14, color: "#FFF0E0", name: "Moderate", range: "(10–14)", textColor: "#C07A3A" },
+    { min: 0, max: 5, color: "#E0EAF5", name: "Minimal", range: "(0–4)", textColor: "#4A6FA5" },
+    { min: 5, max: 10, color: "#FFF8E1", name: "Mild", range: "(5–9)", textColor: "#B08C3E" },
+    { min: 10, max: 15, color: "#FFF0E0", name: "Moderate", range: "(10–14)", textColor: "#C07A3A" },
     { min: 15, max: 21, color: "#FCE8E6", name: "Severe", range: "(15–21)", textColor: "#A3402F" },
   ].forEach(band => {
     const yTop = yPos(band.max), yBot = yPos(band.min);
