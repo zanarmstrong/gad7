@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GAD-7 Score Tracker</title>
+<title>Mental Health Score Trackers</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -11,14 +11,6 @@
     --text: #2C2926;
     --muted: #9B9490;
     --line: #E2DDD8;
-    --baseline: #8B7355;
-    --band-minimal: #E0EAF5;
-    --band-mild: #FFF8E1;
-    --band-moderate: #FFF0E0;
-    --band-severe: #FCE8E6;
-    --stick-above: #2B4C7E;
-    --dot-above: #1A3558;
-    --missing: #D4CFC9;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,468 +27,114 @@
   }
 
   .container {
-    max-width: 860px;
+    max-width: 540px;
     width: 100%;
   }
 
   h1 {
     font-family: 'DM Serif Display', serif;
-    font-size: 1.75rem;
+    font-size: 2rem;
     font-weight: 400;
-    margin-bottom: 0.25rem;
-    color: var(--text);
+    margin-bottom: 0.5rem;
   }
 
   .subtitle {
     color: var(--muted);
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
   }
 
-  .chart-area {
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .card {
+    display: block;
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 0.35rem;
+  }
+
+  .card-desc {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .card-color {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
     position: relative;
-    width: 100%;
-    height: 440px;
-    margin-bottom: 1rem;
+    top: -1px;
   }
 
-  svg { width: 100%; height: 100%; overflow: visible; }
-  .grid-line { stroke: var(--line); stroke-width: 0.5; stroke-dasharray: 3 4; }
-  .baseline-line { stroke: var(--baseline); stroke-width: 1.5; stroke-dasharray: 6 4; }
-  .stick { stroke-width: 2.5; stroke-linecap: round; }
-  .dot { transition: r 0.2s ease, filter 0.2s ease; cursor: default; }
-  .dot:hover { filter: drop-shadow(0 2px 6px rgba(0,0,0,0.18)); }
-  .y-label { fill: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 12px; text-anchor: end; }
-  .x-label { fill: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 11px; text-anchor: middle; }
-  .band-label { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
-
-  .tooltip {
-    position: absolute; pointer-events: none; background: white;
-    border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px;
-    font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    opacity: 0; transition: opacity 0.15s ease; z-index: 10;
+  .privacy {
+    margin-top: 2.5rem;
+    padding: 0.75rem 1rem;
+    background: #F0EDE8;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
   }
-  .tooltip.visible { opacity: 1; }
-  .tooltip .date { color: var(--muted); font-size: 0.72rem; margin-bottom: 2px; }
-  .tooltip .score { font-weight: 600; font-size: 1rem; }
-  .tooltip .severity { font-size: 0.72rem; margin-top: 1px; }
-  .tooltip .tip-annotation { font-size: 0.72rem; font-style: italic; color: var(--muted); margin-top: 3px; }
 
-  .data-input-area { margin-top: 2rem; }
-  .data-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
-  .data-format { font-weight: 400; color: var(--muted); font-size: 0.78rem; }
-
-  #dataInput {
-    width: 100%; min-height: 140px; padding: 0.75rem 1rem;
-    font-family: 'DM Sans', monospace; font-size: 0.82rem; line-height: 1.6;
-    color: var(--text); background: #F0EDE8; border: 1px solid var(--line);
-    border-radius: 8px; resize: vertical; outline: none; transition: border-color 0.2s ease;
+  .privacy a {
+    color: #4A6FA5;
+    text-decoration: none;
   }
-  #dataInput::placeholder { color: #C0B9B2; }
-  #dataInput:focus { border-color: var(--baseline); }
 
-  .data-status { margin-top: 0.4rem; font-size: 0.75rem; min-height: 1.2em; }
-  .data-status.success { color: #3D6B45; }
-  .data-status.error { color: #C2584B; }
-
-  .privacy-note {
-    margin-top: 0.75rem; padding: 0.75rem 1rem; background: #F0EDE8;
-    border-radius: 8px; font-size: 0.78rem; color: var(--muted); line-height: 1.6;
+  .privacy a:hover {
+    text-decoration: underline;
   }
-  .privacy-note a { color: #4A6FA5; text-decoration: none; }
-  .privacy-note a:hover { text-decoration: underline; }
-
-  .save-btn {
-    display: inline-flex; align-items: center; gap: 6px; margin-top: 0.75rem;
-    padding: 0.5rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
-    font-weight: 500; color: var(--muted); background: #F0EDE8;
-    border: 1px solid var(--line); border-radius: 6px; cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
-  }
-  .save-btn:hover { background: #E6E2DC; color: var(--text); }
-  .save-btn:active { background: #DDD8D2; }
 
   @media (max-width: 600px) {
-    body { padding: 1rem; align-items: flex-start; }
-    h1 { font-size: 1.4rem; }
-    .subtitle { font-size: 0.8rem; margin-bottom: 1.25rem; }
-    .chart-area { height: 380px; }
-    .data-label { font-size: 0.8rem; }
-    .data-format { display: block; margin-top: 0.25rem; font-size: 0.72rem; }
-    #dataInput { font-size: 0.78rem; min-height: 120px; }
-    .privacy-note { font-size: 0.72rem; }
+    body { padding: 1.25rem; align-items: flex-start; }
+    h1 { font-size: 1.6rem; }
+    .card { padding: 1.25rem; }
   }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>GAD-7 Anxiety Score</h1>
-  <p class="subtitle">Weekly check-in &middot; baseline at 5 (mild/moderate cutoff)</p>
+  <h1>Score Trackers</h1>
+  <p class="subtitle">Simple tools to visualize mental health screening scores over time. Paste in your data and see the chart — everything stays in your browser.</p>
 
-  <div class="chart-area" id="chartArea">
-    <svg id="chart"></svg>
-    <div class="tooltip" id="tooltip">
-      <div class="date" id="tipDate"></div>
-      <div class="score" id="tipScore"></div>
-      <div class="severity" id="tipSeverity"></div>
-      <div class="tip-annotation" id="tipAnnotation"></div>
-    </div>
-  </div>
+  <div class="cards">
+    <a href="gad7.html" class="card">
+      <div class="card-title"><span class="card-color" style="background: #1A3558;"></span>GAD-7 Anxiety</div>
+      <div class="card-desc">Track Generalized Anxiety Disorder scores (0–21) with severity bands for minimal, mild, moderate, and severe anxiety.</div>
+    </a>
 
-  <button id="savePng" class="save-btn">Save as PNG</button>
-
-  <div class="data-input-area">
-    <label for="dataInput" class="data-label">Paste your data here <span class="data-format">(date,score,annotation — one per line, blank score = missed session, annotation is optional)</span></label>
-    <textarea id="dataInput" spellcheck="false"></textarea>
-    <div class="data-status" id="dataStatus"></div>
-    <div class="privacy-note">
-      🔒 Your data stays in your browser. Nothing is sent to any server. This is a static page with no tracking, no cookies, and no analytics.
-      <a href="https://github.com/zanarmstrong/gad7" target="_blank" rel="noopener">View the source code</a> to verify.
-    </div>
+    <a href="phq9.html" class="card">
+      <div class="card-title"><span class="card-color" style="background: #3D2E6B;"></span>PHQ-9 Depression</div>
+      <div class="card-desc">Track Patient Health Questionnaire scores (0–27) with severity bands for none-minimal, mild, moderate, moderately severe, and severe depression.</div>
+    </a>
   </div>
 </div>
-
-<script>
-const DEFAULT_CSV = `date,score,annotation
-2026-03-01,8,Started therapy
-2026-03-08,6,
-2026-03-15,5,
-2026-03-22,9,Stressful week
-2026-03-29,,
-2026-04-05,4,
-2026-04-12,3,
-2026-04-19,,
-2026-04-26,,
-2026-05-03,7,
-2026-05-10,4,New medication
-2026-05-17,4,`;
-
-let DATA = [];
-const BASELINE = 5;
-const Y_MIN = 0;
-const Y_MAX = 21;
-
-const BANDS = [
-  { min: 0,  max: 4,  color: "var(--band-minimal)", name: "Minimal",  range: "(0–4)",   textColor: "#4A6FA5" },
-  { min: 5,  max: 9,  color: "var(--band-mild)",     name: "Mild",     range: "(5–9)",   textColor: "#B08C3E" },
-  { min: 10, max: 14, color: "var(--band-moderate)",  name: "Moderate", range: "(10–14)", textColor: "#C07A3A" },
-  { min: 15, max: 21, color: "var(--band-severe)",    name: "Severe",   range: "(15–21)", textColor: "#A3402F" },
-];
-
-function getSeverity(score) {
-  for (const b of BANDS) { if (score >= b.min && score <= b.max) return b; }
-  return BANDS[0];
-}
-
-function parseCSV(text) {
-  const lines = text.trim().split("\n").map(l => l.trim()).filter(l => l);
-  const results = [];
-  for (const line of lines) {
-    if (line.toLowerCase().startsWith("date")) continue;
-    const parts = line.split(",");
-    if (parts.length < 1) continue;
-    const date = parts[0].trim();
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) continue;
-    const scoreStr = parts[1] ? parts[1].trim() : "";
-    const score = scoreStr === "" ? null : parseInt(scoreStr, 10);
-    if (score !== null && (isNaN(score) || score < 0 || score > 21)) continue;
-    const annotation = parts.length >= 3 ? parts.slice(2).join(",").trim() : "";
-    results.push({ date, score, annotation });
-  }
-  return results;
-}
-
-const svg = document.getElementById("chart");
-const chartArea = document.getElementById("chartArea");
-const tooltip = document.getElementById("tooltip");
-const tipDate = document.getElementById("tipDate");
-const tipScore = document.getElementById("tipScore");
-const tipSeverity = document.getElementById("tipSeverity");
-const tipAnnotation = document.getElementById("tipAnnotation");
-const dataInput = document.getElementById("dataInput");
-const dataStatus = document.getElementById("dataStatus");
-
-dataInput.value = DEFAULT_CSV;
-DATA = parseCSV(DEFAULT_CSV);
-
-let debounceTimer;
-dataInput.addEventListener("input", () => {
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => {
-    const parsed = parseCSV(dataInput.value);
-    if (parsed.length > 0) {
-      DATA = parsed;
-      dataStatus.textContent = `✓ ${parsed.length} data points loaded`;
-      dataStatus.className = "data-status success";
-      render();
-    } else {
-      dataStatus.textContent = "No valid rows found — use format: YYYY-MM-DD,score";
-      dataStatus.className = "data-status error";
-    }
-  }, 400);
-});
-
-function render() {
-  svg.innerHTML = "";
-  const rect = chartArea.getBoundingClientRect();
-  const W = rect.width;
-  const H = rect.height;
-  const isMobile = W < 500;
-  const pad = { top: 16, right: isMobile ? 80 : 120, bottom: isMobile ? 54 : 44, left: isMobile ? 32 : 42 };
-  const cw = W - pad.left - pad.right;
-  const ch = H - pad.top - pad.bottom;
-
-  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-
-  const n = DATA.length;
-  const xBuffer = 20;
-  const xStep = (cw - 2 * xBuffer) / (n - 1);
-  const x = i => pad.left + xBuffer + i * xStep;
-  const y = v => pad.top + ch - ((v - Y_MIN) / (Y_MAX - Y_MIN)) * ch;
-
-  // Severity bands (with gaps between categories)
-  BANDS.forEach(band => {
-    const yTop = y(band.max);
-    const yBot = y(band.min);
-    const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    r.setAttribute("x", pad.left);
-    r.setAttribute("y", yTop);
-    r.setAttribute("width", cw);
-    r.setAttribute("height", yBot - yTop);
-    r.setAttribute("fill", band.color);
-    r.setAttribute("rx", "2");
-    svg.appendChild(r);
-
-    const midY = (yTop + yBot) / 2;
-    const labelSize = isMobile ? "8px" : "10px";
-    const t1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    t1.setAttribute("x", pad.left + cw + 6);
-    t1.setAttribute("y", midY - 4);
-    t1.setAttribute("fill", band.textColor);
-    t1.classList.add("band-label");
-    t1.style.fontSize = labelSize;
-    t1.textContent = band.name;
-    svg.appendChild(t1);
-
-    const t2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    t2.setAttribute("x", pad.left + cw + 6);
-    t2.setAttribute("y", midY + 8);
-    t2.setAttribute("fill", band.textColor);
-    t2.classList.add("band-label");
-    t2.style.opacity = "0.7";
-    t2.style.fontSize = labelSize;
-    t2.textContent = band.range;
-    svg.appendChild(t2);
-  });
-
-  // Grid lines
-  const gridValues = [0, 5, 10, 15, 21];
-  for (const v of gridValues) {
-    if (v === BASELINE) continue;
-    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line.setAttribute("x1", pad.left);
-    line.setAttribute("x2", pad.left + cw);
-    line.setAttribute("y1", y(v));
-    line.setAttribute("y2", y(v));
-    line.classList.add("grid-line");
-    svg.appendChild(line);
-  }
-
-  // Baseline
-  const bl = document.createElementNS("http://www.w3.org/2000/svg", "line");
-  bl.setAttribute("x1", pad.left - 4);
-  bl.setAttribute("x2", pad.left + cw);
-  bl.setAttribute("y1", y(BASELINE));
-  bl.setAttribute("y2", y(BASELINE));
-  bl.classList.add("baseline-line");
-  svg.appendChild(bl);
-
-  // Y-axis labels
-  for (const v of [0, 5, 10, 15, 21]) {
-    const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    t.setAttribute("x", pad.left - 8);
-    t.setAttribute("y", y(v) + 4);
-    t.classList.add("y-label");
-    if (isMobile) t.style.fontSize = "10px";
-    t.textContent = v;
-    svg.appendChild(t);
-  }
-
-  const fmt = ds => {
-    const d = new Date(ds + "T00:00:00");
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  };
-
-  // X-axis labels
-  DATA.forEach((d, i) => {
-    const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    const lx = x(i);
-    const ly = H - pad.bottom + 18;
-    t.setAttribute("x", lx);
-    t.setAttribute("y", ly);
-    t.classList.add("x-label");
-    t.style.fill = (d.score === null || d.score === undefined) ? "#CCC5BE" : "#706862";
-    if (isMobile) {
-      t.style.fontSize = "9px";
-      t.setAttribute("text-anchor", "end");
-      t.setAttribute("transform", `rotate(-45, ${lx}, ${ly})`);
-    }
-    t.textContent = fmt(d.date);
-    svg.appendChild(t);
-  });
-
-  // Sticks + dots
-  DATA.forEach((d, i) => {
-    const cx = x(i);
-    if (d.score === null || d.score === undefined) return;
-
-    const above = d.score >= BASELINE;
-    const stickColor = "var(--stick-above)";
-    const dotColor = "var(--dot-above)";
-
-    if (above) {
-      const stick = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      stick.setAttribute("x1", cx); stick.setAttribute("x2", cx);
-      stick.setAttribute("y1", y(BASELINE)); stick.setAttribute("y2", y(d.score));
-      stick.classList.add("stick"); stick.style.stroke = stickColor;
-      svg.appendChild(stick);
-    }
-
-    const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    dot.setAttribute("cx", cx); dot.setAttribute("cy", y(d.score));
-    dot.setAttribute("r", isMobile ? 5 : 6);
-    dot.setAttribute("fill", dotColor); dot.classList.add("dot");
-    svg.appendChild(dot);
-
-    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    label.setAttribute("x", cx);
-    label.setAttribute("y", y(d.score) + (above ? -10 : 18));
-    label.setAttribute("text-anchor", "middle");
-    label.style.fill = dotColor;
-    label.style.fontSize = isMobile ? "9px" : "11px";
-    label.style.fontWeight = "600";
-    label.style.fontFamily = "'DM Sans', sans-serif";
-    label.textContent = d.score;
-    svg.appendChild(label);
-
-    if (d.annotation) {
-      const aY = above ? (isMobile ? -20 : -26) : (isMobile ? 24 : 28);
-      const ann = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      ann.setAttribute("x", cx);
-      ann.setAttribute("y", y(d.score) + aY);
-      ann.setAttribute("text-anchor", "middle");
-      ann.style.fill = "var(--muted)";
-      ann.style.fontSize = isMobile ? "7px" : "9px";
-      ann.style.fontStyle = "italic";
-      ann.style.fontFamily = "'DM Sans', sans-serif";
-      ann.textContent = d.annotation;
-      svg.appendChild(ann);
-    }
-
-    const hover = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    hover.setAttribute("x", cx - xStep / 2); hover.setAttribute("y", pad.top);
-    hover.setAttribute("width", xStep); hover.setAttribute("height", ch);
-    hover.setAttribute("fill", "transparent"); hover.style.cursor = "default";
-    const showTip = () => {
-      const sev = getSeverity(d.score);
-      tipDate.textContent = fmt(d.date);
-      tipScore.textContent = `Score: ${d.score}`;
-      tipScore.style.color = dotColor;
-      tipSeverity.textContent = sev.name + " anxiety";
-      tipSeverity.style.color = sev.textColor;
-      tipAnnotation.textContent = d.annotation || "";
-      tipAnnotation.style.display = d.annotation ? "block" : "none";
-      tooltip.classList.add("visible");
-      tooltip.style.left = Math.min(cx + 12, W - 140) + "px";
-      tooltip.style.top = (y(d.score) - 50) + "px";
-    };
-    const hideTip = () => tooltip.classList.remove("visible");
-    hover.addEventListener("mouseenter", showTip);
-    hover.addEventListener("mouseleave", hideTip);
-    hover.addEventListener("touchstart", (e) => { e.preventDefault(); showTip(); setTimeout(hideTip, 2000); }, { passive: false });
-    svg.appendChild(hover);
-  });
-
-  // Entrance animation
-  svg.querySelectorAll(".stick").forEach((s, i) => {
-    const y2 = s.getAttribute("y2"), y1 = s.getAttribute("y1");
-    s.setAttribute("y2", y1); s.style.transition = "none";
-    requestAnimationFrame(() => { s.style.transition = `y2 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 60}ms`; s.setAttribute("y2", y2); });
-  });
-  svg.querySelectorAll(".dot").forEach((d, i) => {
-    d.style.opacity = "0";
-    d.style.transition = `opacity 0.3s ease ${i * 60 + 300}ms, r 0.2s ease, filter 0.2s ease`;
-    requestAnimationFrame(() => { d.style.opacity = "1"; });
-  });
-}
-
-render();
-window.addEventListener("resize", render);
-
-// Save as PNG
-document.getElementById("savePng").addEventListener("click", () => {
-  const scale = 2, W = 860, H = 440;
-  const pad = { top: 16, right: 120, bottom: 44, left: 42 };
-  const cw = W - pad.left - pad.right, ch = H - pad.top - pad.bottom;
-  const n = DATA.length, xBuffer = 20;
-  const xStep = (cw - 2 * xBuffer) / (n - 1);
-  const xPos = i => pad.left + xBuffer + i * xStep;
-  const yPos = v => pad.top + ch - ((v - Y_MIN) / (Y_MAX - Y_MIN)) * ch;
-
-  const canvas = document.createElement("canvas");
-  canvas.width = W * scale; canvas.height = H * scale;
-  const ctx = canvas.getContext("2d"); ctx.scale(scale, scale);
-
-  ctx.fillStyle = "#FAF7F2"; ctx.fillRect(0, 0, W, H);
-
-  // Bands with gaps
-  [
-    { min: 0, max: 4, color: "#E0EAF5", name: "Minimal", range: "(0–4)", textColor: "#4A6FA5" },
-    { min: 5, max: 9, color: "#FFF8E1", name: "Mild", range: "(5–9)", textColor: "#B08C3E" },
-    { min: 10, max: 14, color: "#FFF0E0", name: "Moderate", range: "(10–14)", textColor: "#C07A3A" },
-    { min: 15, max: 21, color: "#FCE8E6", name: "Severe", range: "(15–21)", textColor: "#A3402F" },
-  ].forEach(band => {
-    const yTop = yPos(band.max), yBot = yPos(band.min);
-    ctx.fillStyle = band.color; ctx.fillRect(pad.left, yTop, cw, yBot - yTop);
-    const midY = (yTop + yBot) / 2;
-    ctx.font = "500 10px sans-serif"; ctx.fillStyle = band.textColor; ctx.textAlign = "left";
-    ctx.fillText(band.name.toUpperCase(), pad.left + cw + 8, midY - 2);
-    ctx.globalAlpha = 0.7; ctx.fillText(band.range, pad.left + cw + 8, midY + 10); ctx.globalAlpha = 1;
-  });
-
-  [0, 5, 10, 15, 21].forEach(v => {
-    if (v === BASELINE) return;
-    ctx.beginPath(); ctx.setLineDash([3, 4]); ctx.strokeStyle = "#E2DDD8"; ctx.lineWidth = 0.5;
-    ctx.moveTo(pad.left, yPos(v)); ctx.lineTo(pad.left + cw, yPos(v)); ctx.stroke();
-  });
-  ctx.beginPath(); ctx.setLineDash([6, 4]); ctx.strokeStyle = "#8B7355"; ctx.lineWidth = 1.5;
-  ctx.moveTo(pad.left - 4, yPos(BASELINE)); ctx.lineTo(pad.left + cw, yPos(BASELINE)); ctx.stroke(); ctx.setLineDash([]);
-
-  ctx.font = "12px sans-serif"; ctx.fillStyle = "#9B9490"; ctx.textAlign = "right";
-  [0, 5, 10, 15, 21].forEach(v => ctx.fillText(v, pad.left - 10, yPos(v) + 4));
-
-  const fmt = ds => new Date(ds + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  ctx.font = "11px sans-serif"; ctx.textAlign = "center";
-  DATA.forEach((d, i) => {
-    ctx.fillStyle = (d.score === null || d.score === undefined) ? "#CCC5BE" : "#706862";
-    ctx.fillText(fmt(d.date), xPos(i), H - pad.bottom + 20);
-  });
-
-  DATA.forEach((d, i) => {
-    if (d.score === null || d.score === undefined) return;
-    const cx = xPos(i), above = d.score >= BASELINE;
-    if (above) { ctx.beginPath(); ctx.strokeStyle = "#2B4C7E"; ctx.lineWidth = 2.5; ctx.lineCap = "round"; ctx.moveTo(cx, yPos(BASELINE)); ctx.lineTo(cx, yPos(d.score)); ctx.stroke(); }
-    ctx.beginPath(); ctx.fillStyle = "#1A3558"; ctx.arc(cx, yPos(d.score), 6, 0, Math.PI * 2); ctx.fill();
-    ctx.font = "600 11px sans-serif"; ctx.fillStyle = "#1A3558"; ctx.textAlign = "center";
-    ctx.fillText(d.score, cx, yPos(d.score) + (above ? -12 : 16));
-    if (d.annotation) { ctx.font = "italic 9px sans-serif"; ctx.fillStyle = "#9B9490"; ctx.fillText(d.annotation, cx, yPos(d.score) + (above ? -26 : 28)); }
-  });
-
-  const a = document.createElement("a"); a.download = "gad7-chart.png"; a.href = canvas.toDataURL("image/png");
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-});
-</script>
 
 </body>
 </html>
