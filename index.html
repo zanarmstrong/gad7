@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -16,8 +16,6 @@
     --band-mild: #FFF8E1;
     --band-moderate: #FFF0E0;
     --band-severe: #FCE8E6;
-    --stick-below: #6B8F71;
-    --dot-below: #3D6B45;
     --stick-above: #2B4C7E;
     --dot-above: #1A3558;
     --missing: #D4CFC9;
@@ -62,250 +60,71 @@
     margin-bottom: 1rem;
   }
 
-  svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
-
-  .grid-line {
-    stroke: var(--line);
-    stroke-width: 0.5;
-    stroke-dasharray: 3 4;
-  }
-
-  .baseline-line {
-    stroke: var(--baseline);
-    stroke-width: 1.5;
-    stroke-dasharray: 6 4;
-  }
-
-  .stick {
-    stroke-width: 2.5;
-    stroke-linecap: round;
-  }
-
-  .dot {
-    transition: r 0.2s ease, filter 0.2s ease;
-    cursor: default;
-  }
-
-  .dot:hover {
-    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.18));
-  }
-
-  .missing-marker {
-    stroke: var(--missing);
-    stroke-width: 1.5;
-    stroke-dasharray: 2 3;
-  }
-
-  .missing-x {
-    stroke: var(--missing);
-    stroke-width: 1.5;
-    stroke-linecap: round;
-  }
-
-  .y-label {
-    fill: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    text-anchor: end;
-  }
-
-  .x-label {
-    fill: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
-    text-anchor: middle;
-  }
-
-  .band-label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
+  svg { width: 100%; height: 100%; overflow: visible; }
+  .grid-line { stroke: var(--line); stroke-width: 0.5; stroke-dasharray: 3 4; }
+  .baseline-line { stroke: var(--baseline); stroke-width: 1.5; stroke-dasharray: 6 4; }
+  .stick { stroke-width: 2.5; stroke-linecap: round; }
+  .dot { transition: r 0.2s ease, filter 0.2s ease; cursor: default; }
+  .dot:hover { filter: drop-shadow(0 2px 6px rgba(0,0,0,0.18)); }
+  .y-label { fill: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 12px; text-anchor: end; }
+  .x-label { fill: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 11px; text-anchor: middle; }
+  .band-label { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
 
   .tooltip {
-    position: absolute;
-    pointer-events: none;
-    background: white;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 0.8rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    opacity: 0;
-    transition: opacity 0.15s ease;
-    z-index: 10;
+    position: absolute; pointer-events: none; background: white;
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px;
+    font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    opacity: 0; transition: opacity 0.15s ease; z-index: 10;
   }
-
   .tooltip.visible { opacity: 1; }
+  .tooltip .date { color: var(--muted); font-size: 0.72rem; margin-bottom: 2px; }
+  .tooltip .score { font-weight: 600; font-size: 1rem; }
+  .tooltip .severity { font-size: 0.72rem; margin-top: 1px; }
+  .tooltip .tip-annotation { font-size: 0.72rem; font-style: italic; color: var(--muted); margin-top: 3px; }
 
-  .tooltip .date {
-    color: var(--muted);
-    font-size: 0.72rem;
-    margin-bottom: 2px;
-  }
-
-  .tooltip .score {
-    font-weight: 600;
-    font-size: 1rem;
-  }
-
-  .tooltip .severity {
-    font-size: 0.72rem;
-    margin-top: 1px;
-  }
-
-  .tooltip .tip-annotation {
-    font-size: 0.72rem;
-    font-style: italic;
-    color: var(--muted);
-    margin-top: 3px;
-  }
-
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    align-items: center;
-    color: var(--muted);
-    font-size: 0.78rem;
-    margin-top: 0.5rem;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .legend-swatch {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-  }
-
-  .legend-band {
-    width: 16px;
-    height: 10px;
-    border-radius: 2px;
-  }
-
-  .edit-hint {
-    margin-top: 2rem;
-    padding: 1rem 1.25rem;
-    background: #F0EDE8;
-    border-radius: 8px;
-    font-size: 0.78rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .edit-hint code {
-    background: #E6E2DC;
-    padding: 1px 5px;
-    border-radius: 3px;
-    font-size: 0.76rem;
-  }
-
-  .data-input-area {
-    margin-top: 2rem;
-  }
-
-  .data-label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-  }
-
-  .data-format {
-    font-weight: 400;
-    color: var(--muted);
-    font-size: 0.78rem;
-  }
+  .data-input-area { margin-top: 2rem; }
+  .data-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+  .data-format { font-weight: 400; color: var(--muted); font-size: 0.78rem; }
 
   #dataInput {
-    width: 100%;
-    min-height: 140px;
-    padding: 0.75rem 1rem;
-    font-family: 'DM Sans', monospace;
-    font-size: 0.82rem;
-    line-height: 1.6;
-    color: var(--text);
-    background: #F0EDE8;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    resize: vertical;
-    outline: none;
-    transition: border-color 0.2s ease;
+    width: 100%; min-height: 140px; padding: 0.75rem 1rem;
+    font-family: 'DM Sans', monospace; font-size: 0.82rem; line-height: 1.6;
+    color: var(--text); background: #F0EDE8; border: 1px solid var(--line);
+    border-radius: 8px; resize: vertical; outline: none; transition: border-color 0.2s ease;
   }
+  #dataInput::placeholder { color: #C0B9B2; }
+  #dataInput:focus { border-color: var(--baseline); }
 
-  #dataInput::placeholder {
-    color: #C0B9B2;
-  }
-
-  #dataInput:focus {
-    border-color: var(--baseline);
-  }
-
-  .data-status {
-    margin-top: 0.4rem;
-    font-size: 0.75rem;
-    min-height: 1.2em;
-  }
-
+  .data-status { margin-top: 0.4rem; font-size: 0.75rem; min-height: 1.2em; }
   .data-status.success { color: #3D6B45; }
   .data-status.error { color: #C2584B; }
 
   .privacy-note {
-    margin-top: 0.75rem;
-    padding: 0.75rem 1rem;
-    background: #F0EDE8;
-    border-radius: 8px;
-    font-size: 0.78rem;
-    color: var(--muted);
-    line-height: 1.6;
+    margin-top: 0.75rem; padding: 0.75rem 1rem; background: #F0EDE8;
+    border-radius: 8px; font-size: 0.78rem; color: var(--muted); line-height: 1.6;
   }
-
-  .privacy-note a {
-    color: #4A6FA5;
-    text-decoration: none;
-  }
-
-  .privacy-note a:hover {
-    text-decoration: underline;
-  }
+  .privacy-note a { color: #4A6FA5; text-decoration: none; }
+  .privacy-note a:hover { text-decoration: underline; }
 
   .save-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 0.75rem;
-    padding: 0.5rem 1rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--muted);
-    background: #F0EDE8;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 0.75rem;
+    padding: 0.5rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+    font-weight: 500; color: var(--muted); background: #F0EDE8;
+    border: 1px solid var(--line); border-radius: 6px; cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease;
   }
+  .save-btn:hover { background: #E6E2DC; color: var(--text); }
+  .save-btn:active { background: #DDD8D2; }
 
-  .save-btn:hover {
-    background: #E6E2DC;
-    color: var(--text);
-  }
-
-  .save-btn:active {
-    background: #DDD8D2;
+  @media (max-width: 600px) {
+    body { padding: 1rem; align-items: flex-start; }
+    h1 { font-size: 1.4rem; }
+    .subtitle { font-size: 0.8rem; margin-bottom: 1.25rem; }
+    .chart-area { height: 380px; }
+    .data-label { font-size: 0.8rem; }
+    .data-format { display: block; margin-top: 0.25rem; font-size: 0.72rem; }
+    #dataInput { font-size: 0.78rem; min-height: 120px; }
+    .privacy-note { font-size: 0.72rem; }
   }
 </style>
 </head>
@@ -332,16 +151,13 @@
     <textarea id="dataInput" spellcheck="false"></textarea>
     <div class="data-status" id="dataStatus"></div>
     <div class="privacy-note">
-      🔒 Your data stays in your browser. Nothing is sent to any server. This is a static page with no tracking, no cookies, and no analytics. 
+      🔒 Your data stays in your browser. Nothing is sent to any server. This is a static page with no tracking, no cookies, and no analytics.
       <a href="https://github.com/zanarmstrong/gad7" target="_blank" rel="noopener">View the source code</a> to verify.
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-//  DEFAULT DATA
-// ═══════════════════════════════════════════
 const DEFAULT_CSV = `date,score,annotation
 2026-03-01,8,Started therapy
 2026-03-08,6,
@@ -361,18 +177,15 @@ const BASELINE = 5;
 const Y_MIN = 0;
 const Y_MAX = 21;
 
-// Severity bands
 const BANDS = [
-  { min: 0,  max: 4,  color: "var(--band-minimal)",  name: "Minimal",  range: "(0–4)",   textColor: "#4A6FA5" },
-  { min: 5,  max: 9,  color: "var(--band-mild)",      name: "Mild",     range: "(5–9)",   textColor: "#B08C3E" },
-  { min: 10, max: 14, color: "var(--band-moderate)",   name: "Moderate", range: "(10–14)", textColor: "#C07A3A" },
-  { min: 15, max: 21, color: "var(--band-severe)",     name: "Severe",   range: "(15–21)", textColor: "#A3402F" },
+  { min: 0,  max: 4,  color: "var(--band-minimal)", name: "Minimal",  range: "(0–4)",   textColor: "#4A6FA5" },
+  { min: 5,  max: 9,  color: "var(--band-mild)",     name: "Mild",     range: "(5–9)",   textColor: "#B08C3E" },
+  { min: 10, max: 14, color: "var(--band-moderate)",  name: "Moderate", range: "(10–14)", textColor: "#C07A3A" },
+  { min: 15, max: 21, color: "var(--band-severe)",    name: "Severe",   range: "(15–21)", textColor: "#A3402F" },
 ];
 
 function getSeverity(score) {
-  for (const b of BANDS) {
-    if (score >= b.min && score <= b.max) return b;
-  }
+  for (const b of BANDS) { if (score >= b.min && score <= b.max) return b; }
   return BANDS[0];
 }
 
@@ -404,11 +217,9 @@ const tipAnnotation = document.getElementById("tipAnnotation");
 const dataInput = document.getElementById("dataInput");
 const dataStatus = document.getElementById("dataStatus");
 
-// Initialize textarea
 dataInput.value = DEFAULT_CSV;
 DATA = parseCSV(DEFAULT_CSV);
 
-// Listen for changes
 let debounceTimer;
 dataInput.addEventListener("input", () => {
   clearTimeout(debounceTimer);
@@ -431,7 +242,8 @@ function render() {
   const rect = chartArea.getBoundingClientRect();
   const W = rect.width;
   const H = rect.height;
-  const pad = { top: 16, right: 120, bottom: 44, left: 42 };
+  const isMobile = W < 500;
+  const pad = { top: 16, right: isMobile ? 80 : 120, bottom: isMobile ? 54 : 44, left: isMobile ? 32 : 42 };
   const cw = W - pad.left - pad.right;
   const ch = H - pad.top - pad.bottom;
 
@@ -443,9 +255,9 @@ function render() {
   const x = i => pad.left + xBuffer + i * xStep;
   const y = v => pad.top + ch - ((v - Y_MIN) / (Y_MAX - Y_MIN)) * ch;
 
-  // Severity background bands
+  // Severity bands (with gaps between categories)
   BANDS.forEach(band => {
-    const yTop = y(Math.min(band.max + 1, Y_MAX));
+    const yTop = y(band.max);
     const yBot = y(band.min);
     const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     r.setAttribute("x", pad.left);
@@ -456,27 +268,29 @@ function render() {
     r.setAttribute("rx", "2");
     svg.appendChild(r);
 
-    // Band label on right side (two lines)
     const midY = (yTop + yBot) / 2;
+    const labelSize = isMobile ? "8px" : "10px";
     const t1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    t1.setAttribute("x", pad.left + cw + 8);
+    t1.setAttribute("x", pad.left + cw + 6);
     t1.setAttribute("y", midY - 4);
     t1.setAttribute("fill", band.textColor);
     t1.classList.add("band-label");
+    t1.style.fontSize = labelSize;
     t1.textContent = band.name;
     svg.appendChild(t1);
 
     const t2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    t2.setAttribute("x", pad.left + cw + 8);
+    t2.setAttribute("x", pad.left + cw + 6);
     t2.setAttribute("y", midY + 8);
     t2.setAttribute("fill", band.textColor);
     t2.classList.add("band-label");
     t2.style.opacity = "0.7";
+    t2.style.fontSize = labelSize;
     t2.textContent = band.range;
     svg.appendChild(t2);
   });
 
-  // Grid lines at severity cutoffs
+  // Grid lines
   const gridValues = [0, 5, 10, 15, 21];
   for (const v of gridValues) {
     if (v === BASELINE) continue;
@@ -498,18 +312,17 @@ function render() {
   bl.classList.add("baseline-line");
   svg.appendChild(bl);
 
-  // Y-axis labels at severity cutoffs
-  const yLabelValues = [0, 5, 10, 15, 21];
-  for (const v of yLabelValues) {
+  // Y-axis labels
+  for (const v of [0, 5, 10, 15, 21]) {
     const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    t.setAttribute("x", pad.left - 10);
+    t.setAttribute("x", pad.left - 8);
     t.setAttribute("y", y(v) + 4);
     t.classList.add("y-label");
+    if (isMobile) t.style.fontSize = "10px";
     t.textContent = v;
     svg.appendChild(t);
   }
 
-  // Format date
   const fmt = ds => {
     const d = new Date(ds + "T00:00:00");
     return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
@@ -518,10 +331,17 @@ function render() {
   // X-axis labels
   DATA.forEach((d, i) => {
     const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    t.setAttribute("x", x(i));
-    t.setAttribute("y", H - pad.bottom + 20);
+    const lx = x(i);
+    const ly = H - pad.bottom + 18;
+    t.setAttribute("x", lx);
+    t.setAttribute("y", ly);
     t.classList.add("x-label");
     t.style.fill = (d.score === null || d.score === undefined) ? "#CCC5BE" : "#706862";
+    if (isMobile) {
+      t.style.fontSize = "9px";
+      t.setAttribute("text-anchor", "end");
+      t.setAttribute("transform", `rotate(-45, ${lx}, ${ly})`);
+    }
     t.textContent = fmt(d.date);
     svg.appendChild(t);
   });
@@ -529,72 +349,56 @@ function render() {
   // Sticks + dots
   DATA.forEach((d, i) => {
     const cx = x(i);
-
-    if (d.score === null || d.score === undefined) {
-      return;
-    }
+    if (d.score === null || d.score === undefined) return;
 
     const above = d.score >= BASELINE;
     const stickColor = "var(--stick-above)";
     const dotColor = "var(--dot-above)";
 
-    // Stick (only for above-cutoff)
     if (above) {
       const stick = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      stick.setAttribute("x1", cx);
-      stick.setAttribute("x2", cx);
-      stick.setAttribute("y1", y(BASELINE));
-      stick.setAttribute("y2", y(d.score));
-      stick.classList.add("stick");
-      stick.style.stroke = stickColor;
+      stick.setAttribute("x1", cx); stick.setAttribute("x2", cx);
+      stick.setAttribute("y1", y(BASELINE)); stick.setAttribute("y2", y(d.score));
+      stick.classList.add("stick"); stick.style.stroke = stickColor;
       svg.appendChild(stick);
     }
 
-    // Dot
     const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    dot.setAttribute("cx", cx);
-    dot.setAttribute("cy", y(d.score));
-    dot.setAttribute("r", 6);
-    dot.setAttribute("fill", dotColor);
-    dot.classList.add("dot");
+    dot.setAttribute("cx", cx); dot.setAttribute("cy", y(d.score));
+    dot.setAttribute("r", isMobile ? 5 : 6);
+    dot.setAttribute("fill", dotColor); dot.classList.add("dot");
     svg.appendChild(dot);
 
-    // Score label
     const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
     label.setAttribute("x", cx);
-    label.setAttribute("y", y(d.score) + (d.score >= BASELINE ? -12 : 16));
+    label.setAttribute("y", y(d.score) + (above ? -10 : 18));
     label.setAttribute("text-anchor", "middle");
     label.style.fill = dotColor;
-    label.style.fontSize = "11px";
+    label.style.fontSize = isMobile ? "9px" : "11px";
     label.style.fontWeight = "600";
     label.style.fontFamily = "'DM Sans', sans-serif";
     label.textContent = d.score;
     svg.appendChild(label);
 
-    // Annotation
     if (d.annotation) {
-      const aY = d.score >= BASELINE ? -26 : 28;
+      const aY = above ? (isMobile ? -20 : -26) : (isMobile ? 24 : 28);
       const ann = document.createElementNS("http://www.w3.org/2000/svg", "text");
       ann.setAttribute("x", cx);
       ann.setAttribute("y", y(d.score) + aY);
       ann.setAttribute("text-anchor", "middle");
       ann.style.fill = "var(--muted)";
-      ann.style.fontSize = "9px";
+      ann.style.fontSize = isMobile ? "7px" : "9px";
       ann.style.fontStyle = "italic";
       ann.style.fontFamily = "'DM Sans', sans-serif";
       ann.textContent = d.annotation;
       svg.appendChild(ann);
     }
 
-    // Hover
     const hover = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    hover.setAttribute("x", cx - xStep / 2);
-    hover.setAttribute("y", pad.top);
-    hover.setAttribute("width", xStep);
-    hover.setAttribute("height", ch);
-    hover.setAttribute("fill", "transparent");
-    hover.style.cursor = "default";
-    hover.addEventListener("mouseenter", e => {
+    hover.setAttribute("x", cx - xStep / 2); hover.setAttribute("y", pad.top);
+    hover.setAttribute("width", xStep); hover.setAttribute("height", ch);
+    hover.setAttribute("fill", "transparent"); hover.style.cursor = "default";
+    const showTip = () => {
       const sev = getSeverity(d.score);
       tipDate.textContent = fmt(d.date);
       tipScore.textContent = `Score: ${d.score}`;
@@ -604,30 +408,23 @@ function render() {
       tipAnnotation.textContent = d.annotation || "";
       tipAnnotation.style.display = d.annotation ? "block" : "none";
       tooltip.classList.add("visible");
-      const tx = Math.min(cx + 12, W - 140);
-      tooltip.style.left = tx + "px";
+      tooltip.style.left = Math.min(cx + 12, W - 140) + "px";
       tooltip.style.top = (y(d.score) - 50) + "px";
-    });
-    hover.addEventListener("mouseleave", () => {
-      tooltip.classList.remove("visible");
-    });
+    };
+    const hideTip = () => tooltip.classList.remove("visible");
+    hover.addEventListener("mouseenter", showTip);
+    hover.addEventListener("mouseleave", hideTip);
+    hover.addEventListener("touchstart", (e) => { e.preventDefault(); showTip(); setTimeout(hideTip, 2000); }, { passive: false });
     svg.appendChild(hover);
   });
 
   // Entrance animation
-  const sticks = svg.querySelectorAll(".stick");
-  const dots = svg.querySelectorAll(".dot");
-  sticks.forEach((s, i) => {
-    const y2 = s.getAttribute("y2");
-    const y1 = s.getAttribute("y1");
-    s.setAttribute("y2", y1);
-    s.style.transition = "none";
-    requestAnimationFrame(() => {
-      s.style.transition = `y2 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 60}ms`;
-      s.setAttribute("y2", y2);
-    });
+  svg.querySelectorAll(".stick").forEach((s, i) => {
+    const y2 = s.getAttribute("y2"), y1 = s.getAttribute("y1");
+    s.setAttribute("y2", y1); s.style.transition = "none";
+    requestAnimationFrame(() => { s.style.transition = `y2 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 60}ms`; s.setAttribute("y2", y2); });
   });
-  dots.forEach((d, i) => {
+  svg.querySelectorAll(".dot").forEach((d, i) => {
     d.style.opacity = "0";
     d.style.transition = `opacity 0.3s ease ${i * 60 + 300}ms, r 0.2s ease, filter 0.2s ease`;
     requestAnimationFrame(() => { d.style.opacity = "1"; });
@@ -637,142 +434,67 @@ function render() {
 render();
 window.addEventListener("resize", render);
 
-// Save as PNG — draw directly to canvas
+// Save as PNG
 document.getElementById("savePng").addEventListener("click", () => {
-  const scale = 2;
-  const W = 860;
-  const H = 440;
+  const scale = 2, W = 860, H = 440;
   const pad = { top: 16, right: 120, bottom: 44, left: 42 };
-  const cw = W - pad.left - pad.right;
-  const ch = H - pad.top - pad.bottom;
-  const n = DATA.length;
-  const xBuffer = 20;
+  const cw = W - pad.left - pad.right, ch = H - pad.top - pad.bottom;
+  const n = DATA.length, xBuffer = 20;
   const xStep = (cw - 2 * xBuffer) / (n - 1);
   const xPos = i => pad.left + xBuffer + i * xStep;
   const yPos = v => pad.top + ch - ((v - Y_MIN) / (Y_MAX - Y_MIN)) * ch;
 
   const canvas = document.createElement("canvas");
-  canvas.width = W * scale;
-  canvas.height = H * scale;
-  const ctx = canvas.getContext("2d");
-  ctx.scale(scale, scale);
+  canvas.width = W * scale; canvas.height = H * scale;
+  const ctx = canvas.getContext("2d"); ctx.scale(scale, scale);
 
-  // Background
-  ctx.fillStyle = "#FAF7F2";
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#FAF7F2"; ctx.fillRect(0, 0, W, H);
 
-  // Severity bands
-  const bandColors = [
+  // Bands with gaps
+  [
     { min: 0, max: 4, color: "#E0EAF5", name: "Minimal", range: "(0–4)", textColor: "#4A6FA5" },
     { min: 5, max: 9, color: "#FFF8E1", name: "Mild", range: "(5–9)", textColor: "#B08C3E" },
     { min: 10, max: 14, color: "#FFF0E0", name: "Moderate", range: "(10–14)", textColor: "#C07A3A" },
     { min: 15, max: 21, color: "#FCE8E6", name: "Severe", range: "(15–21)", textColor: "#A3402F" },
-  ];
-  bandColors.forEach(band => {
-    const yTop = yPos(Math.min(band.max + 1, Y_MAX));
-    const yBot = yPos(band.min);
-    ctx.fillStyle = band.color;
-    ctx.fillRect(pad.left, yTop, cw, yBot - yTop);
-
-    // Band labels
+  ].forEach(band => {
+    const yTop = yPos(band.max), yBot = yPos(band.min);
+    ctx.fillStyle = band.color; ctx.fillRect(pad.left, yTop, cw, yBot - yTop);
     const midY = (yTop + yBot) / 2;
-    ctx.font = "500 10px sans-serif";
-    ctx.fillStyle = band.textColor;
-    ctx.textAlign = "left";
+    ctx.font = "500 10px sans-serif"; ctx.fillStyle = band.textColor; ctx.textAlign = "left";
     ctx.fillText(band.name.toUpperCase(), pad.left + cw + 8, midY - 2);
-    ctx.globalAlpha = 0.7;
-    ctx.fillText(band.range, pad.left + cw + 8, midY + 10);
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha = 0.7; ctx.fillText(band.range, pad.left + cw + 8, midY + 10); ctx.globalAlpha = 1;
   });
 
-  // Grid lines
   [0, 5, 10, 15, 21].forEach(v => {
     if (v === BASELINE) return;
-    ctx.beginPath();
-    ctx.setLineDash([3, 4]);
-    ctx.strokeStyle = "#E2DDD8";
-    ctx.lineWidth = 0.5;
-    ctx.moveTo(pad.left, yPos(v));
-    ctx.lineTo(pad.left + cw, yPos(v));
-    ctx.stroke();
+    ctx.beginPath(); ctx.setLineDash([3, 4]); ctx.strokeStyle = "#E2DDD8"; ctx.lineWidth = 0.5;
+    ctx.moveTo(pad.left, yPos(v)); ctx.lineTo(pad.left + cw, yPos(v)); ctx.stroke();
   });
+  ctx.beginPath(); ctx.setLineDash([6, 4]); ctx.strokeStyle = "#8B7355"; ctx.lineWidth = 1.5;
+  ctx.moveTo(pad.left - 4, yPos(BASELINE)); ctx.lineTo(pad.left + cw, yPos(BASELINE)); ctx.stroke(); ctx.setLineDash([]);
 
-  // Baseline
-  ctx.beginPath();
-  ctx.setLineDash([6, 4]);
-  ctx.strokeStyle = "#8B7355";
-  ctx.lineWidth = 1.5;
-  ctx.moveTo(pad.left - 4, yPos(BASELINE));
-  ctx.lineTo(pad.left + cw, yPos(BASELINE));
-  ctx.stroke();
-  ctx.setLineDash([]);
+  ctx.font = "12px sans-serif"; ctx.fillStyle = "#9B9490"; ctx.textAlign = "right";
+  [0, 5, 10, 15, 21].forEach(v => ctx.fillText(v, pad.left - 10, yPos(v) + 4));
 
-  // Y-axis labels
-  ctx.font = "12px sans-serif";
-  ctx.fillStyle = "#9B9490";
-  ctx.textAlign = "right";
-  [0, 5, 10, 15, 21].forEach(v => {
-    ctx.fillText(v, pad.left - 10, yPos(v) + 4);
-  });
-
-  // Format date
-  const fmt = ds => {
-    const d = new Date(ds + "T00:00:00");
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  };
-
-  // X-axis labels
-  ctx.font = "11px sans-serif";
-  ctx.textAlign = "center";
+  const fmt = ds => new Date(ds + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  ctx.font = "11px sans-serif"; ctx.textAlign = "center";
   DATA.forEach((d, i) => {
     ctx.fillStyle = (d.score === null || d.score === undefined) ? "#CCC5BE" : "#706862";
     ctx.fillText(fmt(d.date), xPos(i), H - pad.bottom + 20);
   });
 
-  // Sticks + dots + labels
   DATA.forEach((d, i) => {
     if (d.score === null || d.score === undefined) return;
-    const cx = xPos(i);
-    const above = d.score >= BASELINE;
-
-    // Stick
-    if (above) {
-      ctx.beginPath();
-      ctx.strokeStyle = "#2B4C7E";
-      ctx.lineWidth = 2.5;
-      ctx.lineCap = "round";
-      ctx.moveTo(cx, yPos(BASELINE));
-      ctx.lineTo(cx, yPos(d.score));
-      ctx.stroke();
-    }
-
-    // Dot
-    ctx.beginPath();
-    ctx.fillStyle = "#1A3558";
-    ctx.arc(cx, yPos(d.score), 6, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Score label
-    ctx.font = "600 11px sans-serif";
-    ctx.fillStyle = "#1A3558";
-    ctx.textAlign = "center";
+    const cx = xPos(i), above = d.score >= BASELINE;
+    if (above) { ctx.beginPath(); ctx.strokeStyle = "#2B4C7E"; ctx.lineWidth = 2.5; ctx.lineCap = "round"; ctx.moveTo(cx, yPos(BASELINE)); ctx.lineTo(cx, yPos(d.score)); ctx.stroke(); }
+    ctx.beginPath(); ctx.fillStyle = "#1A3558"; ctx.arc(cx, yPos(d.score), 6, 0, Math.PI * 2); ctx.fill();
+    ctx.font = "600 11px sans-serif"; ctx.fillStyle = "#1A3558"; ctx.textAlign = "center";
     ctx.fillText(d.score, cx, yPos(d.score) + (above ? -12 : 16));
-
-    // Annotation
-    if (d.annotation) {
-      ctx.font = "italic 9px sans-serif";
-      ctx.fillStyle = "#9B9490";
-      ctx.fillText(d.annotation, cx, yPos(d.score) + (above ? -26 : 28));
-    }
+    if (d.annotation) { ctx.font = "italic 9px sans-serif"; ctx.fillStyle = "#9B9490"; ctx.fillText(d.annotation, cx, yPos(d.score) + (above ? -26 : 28)); }
   });
 
-  // Download
-  const a = document.createElement("a");
-  a.download = "gad7-chart.png";
-  a.href = canvas.toDataURL("image/png");
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  const a = document.createElement("a"); a.download = "gad7-chart.png"; a.href = canvas.toDataURL("image/png");
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
 });
 </script>
 
