@@ -356,10 +356,10 @@ const Y_MAX = 27;
 
 // Severity bands (PHQ-9)
 const BANDS = [
-  { min: 0,  max: 4,  color: "var(--band-minimal)",   name: "None-minimal", range: "(0–4)",   textColor: "#4A6FA5" },
-  { min: 5,  max: 9,  color: "var(--band-mild)",       name: "Mild",         range: "(5–9)",   textColor: "#4A7A52" },
-  { min: 10, max: 14, color: "var(--band-moderate)",    name: "Moderate",     range: "(10–14)", textColor: "#B08C3E" },
-  { min: 15, max: 19, color: "var(--band-modsevere)",   name: "Mod. Severe",  range: "(15–19)", textColor: "#C07A3A" },
+  { min: 0,  max: 5,  color: "var(--band-minimal)",   name: "None-minimal", range: "(0–4)",   textColor: "#4A6FA5" },
+  { min: 5,  max: 10, color: "var(--band-mild)",       name: "Mild",         range: "(5–9)",   textColor: "#4A7A52" },
+  { min: 10, max: 15, color: "var(--band-moderate)",    name: "Moderate",     range: "(10–14)", textColor: "#B08C3E" },
+  { min: 15, max: 20, color: "var(--band-modsevere)",   name: "Mod. Severe",  range: "(15–19)", textColor: "#C07A3A" },
   { min: 20, max: 27, color: "var(--band-severe)",      name: "Severe",       range: "(20–27)", textColor: "#A3402F" },
 ];
 
@@ -680,10 +680,10 @@ document.getElementById("savePng").addEventListener("click", () => {
 
   // Severity bands
   const bandColors = [
-    { min: 0, max: 4, color: "#E0EAF5", name: "None-minimal", range: "(0–4)", textColor: "#4A6FA5" },
-    { min: 5, max: 9, color: "#E8F0E4", name: "Mild", range: "(5–9)", textColor: "#4A7A52" },
-    { min: 10, max: 14, color: "#FFF8E1", name: "Moderate", range: "(10–14)", textColor: "#B08C3E" },
-    { min: 15, max: 19, color: "#FFF0E0", name: "Mod. Severe", range: "(15–19)", textColor: "#C07A3A" },
+    { min: 0, max: 5, color: "#E0EAF5", name: "None-minimal", range: "(0–4)", textColor: "#4A6FA5" },
+    { min: 5, max: 10, color: "#E8F0E4", name: "Mild", range: "(5–9)", textColor: "#4A7A52" },
+    { min: 10, max: 15, color: "#FFF8E1", name: "Moderate", range: "(10–14)", textColor: "#B08C3E" },
+    { min: 15, max: 20, color: "#FFF0E0", name: "Mod. Severe", range: "(15–19)", textColor: "#C07A3A" },
     { min: 20, max: 27, color: "#FCE8E6", name: "Severe", range: "(20–27)", textColor: "#A3402F" },
   ];
   bandColors.forEach(band => {
