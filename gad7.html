@@ -254,7 +254,7 @@ function render() {
   const W = rect.width;
   const H = rect.height;
   const isMobile = W < 500;
-  const pad = { top: 16, right: isMobile ? 80 : 120, bottom: isMobile ? 54 : 44, left: isMobile ? 32 : 42 };
+  const pad = { top: 16, right: isMobile ? 80 : 120, bottom: 54, left: isMobile ? 32 : 42 };
   const cw = W - pad.left - pad.right;
   const ch = H - pad.top - pad.bottom;
 
@@ -262,8 +262,12 @@ function render() {
 
   const n = DATA.length;
   const xBuffer = 20;
-  const xStep = (cw - 2 * xBuffer) / (n - 1);
-  const x = i => pad.left + xBuffer + i * xStep;
+  // Date-based x-axis
+  const dates = DATA.map(d => new Date(d.date + "T00:00:00").getTime());
+  const dateMin = Math.min(...dates);
+  const dateMax = Math.max(...dates);
+  const dateRange = dateMax - dateMin || 1;
+  const x = i => pad.left + xBuffer + ((dates[i] - dateMin) / dateRange) * (cw - 2 * xBuffer);
   const y = v => pad.top + ch - ((v - Y_MIN) / (Y_MAX - Y_MIN)) * ch;
 
   // Severity bands (with gaps between categories)
@@ -348,10 +352,10 @@ function render() {
     t.setAttribute("y", ly);
     t.classList.add("x-label");
     t.style.fill = (d.score === null || d.score === undefined) ? "#CCC5BE" : "#706862";
+    t.setAttribute("text-anchor", "end");
+    t.setAttribute("transform", `rotate(-45, ${lx}, ${ly})`);
     if (isMobile) {
       t.style.fontSize = "9px";
-      t.setAttribute("text-anchor", "end");
-      t.setAttribute("transform", `rotate(-45, ${lx}, ${ly})`);
     }
     t.textContent = fmt(d.date);
     svg.appendChild(t);
@@ -406,8 +410,10 @@ function render() {
     }
 
     const hover = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    hover.setAttribute("x", cx - xStep / 2); hover.setAttribute("y", pad.top);
-    hover.setAttribute("width", xStep); hover.setAttribute("height", ch);
+    const hLeft = i === 0 ? pad.left : (x(i) + x(i - 1)) / 2;
+    const hRight = i === n - 1 ? pad.left + cw : (x(i) + x(i + 1)) / 2;
+    hover.setAttribute("x", hLeft); hover.setAttribute("y", pad.top);
+    hover.setAttribute("width", hRight - hLeft); hover.setAttribute("height", ch);
     hover.setAttribute("fill", "transparent"); hover.style.cursor = "default";
     const showTip = () => {
       const sev = getSeverity(d.score);
@@ -451,8 +457,10 @@ document.getElementById("savePng").addEventListener("click", () => {
   const pad = { top: 16, right: 120, bottom: 44, left: 42 };
   const cw = W - pad.left - pad.right, ch = H - pad.top - pad.bottom;
   const n = DATA.length, xBuffer = 20;
-  const xStep = (cw - 2 * xBuffer) / (n - 1);
-  const xPos = i => pad.left + xBuffer + i * xStep;
+  const dates = DATA.map(d => new Date(d.date + "T00:00:00").getTime());
+  const dateMin = Math.min(...dates), dateMax = Math.max(...dates);
+  const dateRange = dateMax - dateMin || 1;
+  const xPos = i => pad.left + xBuffer + ((dates[i] - dateMin) / dateRange) * (cw - 2 * xBuffer);
   const yPos = v => pad.top + ch - ((v - Y_MIN) / (Y_MAX - Y_MIN)) * ch;
 
   const canvas = document.createElement("canvas");
